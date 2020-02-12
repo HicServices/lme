@@ -417,7 +417,7 @@ function auto_os_updates(){
 lin_ver=$( get_distribution )
 echo This OS was detected as: $lin_ver
 if [ $lin_ver == "ubuntu" ]; then
-echo -e "\e[32m[x]\e[0m Configuring Auto Updates"
+echo -e "\e[32m[x]\e[0m Configuring Ubuntu Auto Updates"
 apt-get install unattended-upgrades -y -q
 sed -i 's#//Unattended-Upgrade::Automatic-Reboot "false";#Unattended-Upgrade::Automatic-Reboot "true";#g' /etc/apt/apt.conf.d/50unattended-upgrades
 sed -i 's#//Unattended-Upgrade::Automatic-Reboot-Time "02:00";#Unattended-Upgrade::Automatic-Reboot-Time "02:00";#g' /etc/apt/apt.conf.d/50unattended-upgrades
@@ -457,7 +457,12 @@ echo $apt_DUP_1 >> $auto_os_updatesfile
 fi
 
 
-
+elif [ $lin_ver == "rhel"];
+echo -e "\e[32m[x]\e[0m Configuring RHEL Auto Updates"
+subscription-manager repos --enable rhel-7-server-optional-rpms
+yum install -y -q yum-cron
+systemctl enable yum-cron
+systemctl start yum-cron
 else
 echo -e "\e[33m[x]\e[0m Not configuring automatic updates as this OS is not supported"
 fi
