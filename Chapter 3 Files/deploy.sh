@@ -456,13 +456,6 @@ else
 echo $apt_DUP_1 >> $auto_os_updatesfile
 fi
 
-
-elif [ $lin_ver == "rhel"];
-echo -e "\e[32m[x]\e[0m Configuring RHEL Auto Updates"
-subscription-manager repos --enable rhel-7-server-optional-rpms
-yum install -y -q yum-cron
-systemctl enable yum-cron
-systemctl start yum-cron
 else
 echo -e "\e[33m[x]\e[0m Not configuring automatic updates as this OS is not supported"
 fi
