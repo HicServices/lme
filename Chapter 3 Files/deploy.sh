@@ -116,7 +116,7 @@ curl --cacert certs/root-ca.crt --user elastic:$elastic_user_pass -X POST "https
 function zipfiles(){
 #zip the files to allow the user to download them for the WLB install.
 #copy them to home to start with
-apt-get install zip -y -q
+yum install zip -y -q
 mkdir /tmp/lme
 cp /opt/lme/Chapter\ 3\ Files/winlogbeat.yml /tmp/lme/
 cp /opt/lme/Chapter\ 3\ Files/certs/wlbclient.crt /tmp/lme/
@@ -311,7 +311,7 @@ sed -i "s/insertkibanapasswordhere/$kibana_system_pass/g" /opt/lme/Chapter\ 3\ F
 
 function installdocker(){
 echo -e "\e[32m[x]\e[0m Installing curl to get the docker convenience script"
-apt-get install curl -y -q
+yum install curl -y -q
 echo -e "\e[32m[x]\e[0m Installing docker"
 curl -fsSL https://get.docker.com -o get-docker.sh > /dev/null
 sh get-docker.sh > /dev/null
@@ -359,8 +359,9 @@ crontab -l | { cat; echo "30 1 * * * /opt/lme/lme_update.sh"; } | crontab -
 
 function data_retention(){
 
-#show ext4 disk
-DF_OUTPUT="$(df -h -l -t ext4 --output=source,size)"
+#show storage device which /usr/share/elasticsearch/data is stored on
+#this folder is where the logs are stored as far as I can see (JW, 12/2/20)
+DF_OUTPUT="$(df -h -l --output=source,size /usr/share/elasticsearch/data)"
 
 #pull dev name
 DISK_DEV="$(echo $DF_OUTPUT | cut -d ' ' -f 3)"
@@ -476,7 +477,7 @@ curl --cacert certs/root-ca.crt --user elastic:$elastic_user_pass  -X PUT "https
 function install(){
 echo -e "\e[32m[x]\e[0m Installing prerequisites"
 #install net-tools to allow backwards compatibility
-sudo apt-get install net-tools -y -q
+sudo yum install net-tools -y -q
 #move configs
 cp docker-compose-stack.yml docker-compose-stack-live.yml
 
