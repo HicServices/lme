@@ -547,7 +547,7 @@ else
 echo "Not a valid option"
 fi
 
-installdocker
+#installdocker #removed step as installed with ansible
 initdockerswarm
 populatecerts
 generatepasswords
